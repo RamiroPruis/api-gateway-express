@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EL PAKE TURNOS</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+      <span class="navbar-brand m-1" href="#">TURNOS EL PAKE</span>
+      <button class="navbar-toggler" id="btn-login" disabled="true" onclick="login()">Log in</button>
+      <button class="navbar-toggler" id="btn-logout" disabled="true" onclick="logout()">Log out</button>
+    </nav>
+    <div class="background" >
+      <div class="container-lg formulario">
+        <form action="submit" id="reservas-form">
+          <div class="mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" type="email" name="email" id="reserva-mail" required />
+          </div>
+          <div class="mb-3">
+            <label  class="form-label" for="sucursal">Sucursal</label>
+            <select class="form-control" name="sucursal" id="reserva-sucursal" required></select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="dia">Dia</label>
+            <input class="form-control" type="date" name="dia" id="reserva-dia" required />
+          </div>
+          <div class="mb-3">
+            <label  class="form-label" for="horario">Horarios Disponibles</label>
+            <select class="form-control" name="horario" id="reserva-horario"  required>
+            </select>
+          </div>
+    
+          <button class="btn btn-primary" id="reserva-button">Reserva Ya</button>
+    
+        </form>
+
+
+        <div class="map-cartes">
+          <iframe  src="https://app.cartes.io/maps/b15857ea-d028-4563-84e7-294188a0ad7b/embed?type=map"
+              width="100%"
+              height="400"
+              frameborder="0">
+          </iframe>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div id="modal-confirmar" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Estas por confirmar una reserva con los siguientes datos:</p>
+        <div id="modal-confirm-text">
+
+        </div>
+        <button class="btn btn-primary" id="reserva-confirm">Confirmar</button>
+      </div>
+    </div>
+
+
+    <div id="myModalError" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Hubo un error al solicitar la reserva:</p>
+        <div id="modal-confirm-error">
+        </div>
+        <button class="btn btn-primary" id="reserva-confirm">Confirmar</button>
+      </div>
+    </div>
+
+  </body>
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+  <script src="./js/main.js"></script>
+</html>
