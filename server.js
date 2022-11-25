@@ -1,19 +1,19 @@
 const { application } = require("express");
 const express = require("express");
 const { join } = require("path");
+const cors = require('cors')
 const app = express();
-const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
+const { auth } = require('express-oauth2-jwt-bearer');
 
 
-const jwtCheck = auth({
-
-  audience: 'http://localhost:3000/api',
+const checkJwt = auth({
+  audience: 'TVHxbgABblE2aeYmMaw9Nswdjg5RIohL',
   issuerBaseURL: 'https://dev-rtumndobjb1mq4ay.us.auth0.com/'
 });
 
 // Devuelve archivos estaticos desde la carpeta public
 app.use(express.static(join(__dirname, "public")));
-
+app.use(cors({origin: "*"}))
 // Devuelve el archivo de configuracion
 app.get("/auth_config.json", (req, res) => {
   res.sendFile(join(__dirname, "auth_config.json"));
@@ -21,9 +21,8 @@ app.get("/auth_config.json", (req, res) => {
 
 
 
-app.get("/api/reservas",jwtCheck,(req,res)=>{
-  console.log("hola")
-  res.write(JSON.stringify({msg: "Estas autenticado"}))
+app.get("/api/reservas",checkJwt,(req,res)=>{
+  res.write(JSON.stringify({msg:"ESTAS AUTENTICADO INSTAA"}))
   res.end()
 })
 

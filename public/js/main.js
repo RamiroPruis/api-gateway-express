@@ -9,10 +9,9 @@ const configureClient = async () => {
 
   auth0Client = await auth0.createAuth0Client({
     domain: config.domain,
-    clientId: config.clientId,
-    audience: config.audience
+    clientId: config.clientId
   });
-};
+}; 
 
 window.onload = async () => {
 
@@ -43,6 +42,8 @@ window.onload = async () => {
   }
 };
 
+const TOKEN = (await auth0Client.getIdTokenClaims()).__raw
+
 // NEW
 const updateUI = async () => { 
   const isAuthenticated = await auth0Client.isAuthenticated();
@@ -52,6 +53,9 @@ const updateUI = async () => {
   
   // NEW - add logic to show/hide gated content after authentication
   if (isAuthenticated) {
+
+    const TOKEN = (await auth0Client.getIdTokenClaims()).__raw
+
     document.getElementById("gated-content").classList.remove("hidden");
 
     document.getElementById(
@@ -62,20 +66,22 @@ const updateUI = async () => {
       await auth0Client.getUser()
     );
 
-    const token = await auth0Client.getTokenSilently()
+    
+
     fetch("http://localhost:3000/api/reservas",{
       method: "GET",
       headers:{
-        authorization:`Bearer ${token}`
+        authorization:`Bearer ${TOKEN}`
       }
     })
-    console.log(await auth0Client.getTokenSilently())
+    console.log(await auth0Client.getIdTokenClaims().__raw)
   } else {
     document.getElementById("gated-content").classList.add("hidden");
   }
 
 
 }
+
 
 const logout = () => {
   auth0Client.logout({
@@ -89,7 +95,7 @@ const login = async () => {
   await auth0Client.loginWithRedirect({
     authorizationParams: {
       redirect_uri: window.location.origin
-    }
+    } 
   });
 };
 
