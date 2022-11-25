@@ -1,5 +1,7 @@
 const form = document.getElementById("reservas-form")
 const reservaButton = document.getElementById("reserva-button")
+const myReservaButton = document.getElementById("my-reserva-button")
+const eliminarReservaButton = document.getElementById("eliminar-reserva-button")
 const modal = document.getElementById("myModalConfirm")
 const modalError = document.getElementById("myModalError")
 const modalSolicitar = document.getElementById("myModalSolicitar")
@@ -66,6 +68,8 @@ const updateUI = async () => {
 
     const TOKEN = (await auth0Client.getIdTokenClaims()).__raw
 
+    window.sessionStorage.setItem('token', TOKEN)
+
     document.getElementById("gated-content").classList.remove("hidden");
 
     document.getElementById(
@@ -113,7 +117,7 @@ const login = async () => {
 
 
 const getSucursales = async () => {
-  const reqSucursales = await fetch("http://localhost:8000/api/sucursales/")
+  const reqSucursales = await fetch("http://localhost:3000/api/sucursales/")
   return reqSucursales.json()
 }
 
@@ -153,8 +157,8 @@ getSucursales().then((res) => {
 })
 
 const getReservas = async (params) => {
-  console.log("http://localhost:8000/api/reservas?" + params)
-  const req = await fetch("http://localhost:8000/api/reservas?" + params)
+  console.log("http://localhost:3000/api/reservas?" + params)
+  const req = await fetch("http://localhost:3000/api/reservas?" + params)
   return req.json()
 }
 
@@ -183,6 +187,33 @@ form.addEventListener("submit", (ev) => {
   ev.preventDefault()
 })
 
+eliminarReservaButton.onclick = async () => {
+  const TOKEN =  window.sessionStorage.getItem("token")
+  const options = {
+    method: 'DELETE',
+    headers:{
+      authorization:`Bearer ${TOKEN}`
+    }
+  }
+  const idReserva = 1 //Aca vamos a obtener el id a partir del html, la reserva seleccionada
+
+  const reqEliminarReserva = await fetch("http://localhost:3000/api/reservas/delete/" + idReserva, options)
+  console.log(reqEliminarReserva)
+}
+
+myReservaButton.onclick = async () => {
+  const TOKEN =  window.sessionStorage.getItem("token")
+  const options = {
+    headers:{
+      authorization:`Bearer ${TOKEN}`
+    }
+  }
+  const reqMyReservas = await fetch("http://localhost:3000/api/myReservas", options)
+  console.log(reqMyReservas)
+}
+
+
+
 reservaButton.onclick = async () => {
   const obj = {}
   const formData = new FormData(form)
@@ -193,7 +224,7 @@ reservaButton.onclick = async () => {
 
   console.log(idreserva)
 
-  fetch(`http://localhost:8000/api/reservas/solicitar/${idreserva}`,{
+  fetch(`http://localhost:3000/api/reservas/solicitar/${idreserva}`,{
       method: 'POST',
       body:JSON.stringify(
        {
@@ -286,7 +317,7 @@ reservaConfirm.onclick = () => {
 
   const idreserva = document.querySelector("#reserva-horario").value
 
-  fetch(`http://localhost:8000/api/reservas/confirmar/${idreserva}`,{
+  fetch(`http://localhost:3000/api/reservas/confirmar/${idreserva}`,{
      method:'POST',
      body: JSON.stringify({
         userId: 10,
