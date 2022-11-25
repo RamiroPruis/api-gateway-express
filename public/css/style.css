@@ -66,3 +66,8 @@
     margin-bottom: 10px;
     display: block;
   }
+
+  #reservas-bar{
+    display: none;
+    background-color: #B8C2C2;
+  }

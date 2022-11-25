@@ -9,47 +9,69 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   </head>
 
+
+    <!-- NAVBAR -->
     <nav class="navbar navbar-dark bg-dark">
       <span class="navbar-brand m-1" href="#">Turnos Vacunacion</span>
-      <button id="btn-login" disabled="true" onclick="login()">Log in</button>
-      <button id="btn-logout" disabled="true" onclick="logout()">Log out</button>
+      <button class="btn btn-outline-primary" id="btn-login" disabled="true" onclick="login()">Log in</button>
+      <button class="btn btn-outline-primary" id="btn-logout" disabled="true" onclick="logout()">Log out</button>
+      <button class="btn btn-outline-success" id="btn-misReservas" type="button" >Mis Reservas</button>
     </nav>
-    <div class="background" >
-      <div class="container-lg formulario">
-        <form action="submit" id="reservas-form">
-          <div class="mb-3">
-            <label class="form-label" for="email">Email</label>
-            <input class="form-control" type="email" name="email" id="reserva-mail" required />
-          </div>
-          <div class="mb-3">
-            <label  class="form-label" for="sucursal">Sucursal</label>
-            <select class="form-control" name="sucursal" id="reserva-sucursal" required></select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label" for="dia">Dia</label>
-            <input class="form-control" type="date" name="dia" id="reserva-dia" required />
-          </div>
-          <div class="mb-3">
-            <label  class="form-label" for="horario">Horarios Disponibles</label>
-            <select class="form-control" name="horario" id="reserva-horario"  required>
-            </select>
-          </div>
-    
-          <button class="btn btn-primary" id="reserva-button">Reserva Ya</button>
-    
-        </form>
 
 
-        <div class="pake">
-          <iframe  src="https://app.cartes.io/maps/b15857ea-d028-4563-84e7-294188a0ad7b/embed?type=map"
-              width="100%"
-              height="400"
-              frameborder="0">
-          </iframe>
+    <div class="background container-fluid" >
+      <div class="row">
+        <div class="formulario col-10">
+          <form action="submit" id="reservas-form">
+            <div class="mb-3">
+              <label class="form-label" for="email">Email</label>
+              <input class="form-control" type="email" name="email" id="reserva-mail" required />
+            </div>
+            <div class="mb-3">
+              <label  class="form-label" for="sucursal">Sucursal</label>
+              <select class="form-control" name="sucursal" id="reserva-sucursal" required></select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="dia">Dia</label>
+              <input class="form-control" type="date" name="dia" id="reserva-dia" required />
+            </div>
+            <div class="mb-3">
+              <label  class="form-label" for="horario">Horarios Disponibles</label>
+              <select class="form-control" name="horario" id="reserva-horario"  required>
+              </select>
+            </div>
+      
+            <button class="btn btn-primary" id="reserva-button">Reserva Ya</button>
+      
+          </form>
+  
+          <!-- MAPA -->
+          <div class="pake">
+            <iframe  src="https://app.cartes.io/maps/b15857ea-d028-4563-84e7-294188a0ad7b/embed?type=map"
+                width="100%"
+                height="400"
+                frameborder="0">
+            </iframe>
+          </div>
+        </div>
+        <div class="col-2" id="reservas-bar">
+          <h1 id="user-nombre"></h1>
+          <div class="col" id="mis-reservas">
+              <h2>Mis Reservas</h2>
+              <div class="row card text-white bg-dark">
+                <h5 class="card-title">PAKEEE 1</h5>
+                <p class="card-text">Dia y hora de la reserva</p>
+                <button type="button" class="btn btn-danger">Cancelar</button>
+              </div>
+          </div>
         </div>
       </div>
+      
+
     </div>
     
+
+    <!-- MODAL CONFIRMACION -->
     <div id="myModalConfirm" class="modal">
       <div class="modal-content">
         <span class="close" onclick="refreshPage()">&times;</span>
@@ -61,7 +83,7 @@
       </div>
     </div>
 
-
+    <!-- MODAL ERROR -->
     <div id="myModalError" class="modal">
       <div class="modal-content">
         <span class="close" onclick="refreshPage()">&times;</span>
@@ -72,6 +94,8 @@
       </div>
     </div>
 
+
+    <!-- MODAL SOLICITAR -->
     <div id="myModalSolicitar" class="modal">
       <div class="modal-content">
         <span class="close" onclick="refreshPage()">&times;</span>
@@ -82,6 +106,9 @@
         <button class="btn btn-primary" id="reserva-solicitado" onclick="refreshPage()">Aceptar</button>
       </div>
     </div>
+
+
+    
 
     <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
     <script src="js/main.js"></script>

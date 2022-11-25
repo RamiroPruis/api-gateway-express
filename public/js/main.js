@@ -60,6 +60,7 @@ const updateUI = async () => {
 
   document.getElementById("btn-logout").disabled = !isAuthenticated;
   document.getElementById("btn-login").disabled = isAuthenticated;
+  document.getElementById("btn-misReservas").style.display = isAuthenticated ? "block" : "none"
   
   // NEW - add logic to show/hide gated content after authentication
   if (isAuthenticated) {
@@ -305,3 +306,31 @@ reservaConfirm.onclick = () => {
 
   modal.style.display = "none"
 }
+
+const misReservasButton = document.getElementById("btn-misReservas")
+
+
+
+misReservasButton.addEventListener("click",async ()=>{
+    const user = await auth0Client.getUser()
+    console.log(user)
+    
+    document.getElementById("reservas-bar").style.display = "block"
+
+    const name = document.getElementById("user-nombre")
+    name.innerText = user.name
+    
+    const res = await fetch("http://localhost:3000/api/myReservas")
+    const reservas = await res.json()
+
+    reservas.forEach(r => {
+      const reservaContainer = document.getElementById("mis-reservas")
+      reservaContainer.innerHTML += `
+      <div class="row card text-white bg-dark">
+      <h5 class="card-title">${new Date(r.dateTime).toLocaleDateString()}</h5>
+      <p class="card-text">${new Date(r.dateTime).toLocaleTimeString()}</p>
+      <button type="button" class="btn btn-danger" onclick=cancelar(${r.id})>Cancelar</button>
+    </div>`
+    })
+    
+})
