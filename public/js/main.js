@@ -1,7 +1,6 @@
 const form = document.getElementById("reservas-form")
 const reservaButton = document.getElementById("reserva-button")
-const myReservaButton = document.getElementById("my-reserva-button")
-const eliminarReservaButton = document.getElementById("eliminar-reserva-button")
+//const eliminarReservaButton = document.getElementById("eliminar-reserva-button")
 const modal = document.getElementById("myModalConfirm")
 const modalError = document.getElementById("myModalError")
 const modalSolicitar = document.getElementById("myModalSolicitar")
@@ -188,30 +187,30 @@ form.addEventListener("submit", (ev) => {
   ev.preventDefault()
 })
 
-eliminarReservaButton.onclick = async () => {
-  const TOKEN =  window.sessionStorage.getItem("token")
-  const options = {
-    method: 'DELETE',
-    headers:{
-      authorization:`Bearer ${TOKEN}`
-    }
-  }
-  const idReserva = 1 //Aca vamos a obtener el id a partir del html, la reserva seleccionada
+// eliminarReservaButton.onclick = async () => {
+//   const TOKEN =  window.sessionStorage.getItem("token")
+//   const options = {
+//     method: 'DELETE',
+//     headers:{
+//       authorization:`Bearer ${TOKEN}`
+//     }
+//   }
+//   const idReserva = 1 //Aca vamos a obtener el id a partir del html, la reserva seleccionada
 
-  const reqEliminarReserva = await fetch("http://localhost:3000/api/reservas/delete/" + idReserva, options)
-  console.log(reqEliminarReserva)
-}
+//   const reqEliminarReserva = await fetch("http://localhost:3000/api/reservas/delete/" + idReserva, options)
+//   console.log(reqEliminarReserva)
+// }
 
-myReservaButton.onclick = async () => {
-  const TOKEN =  window.sessionStorage.getItem("token")
-  const options = {
-    headers:{
-      authorization:`Bearer ${TOKEN}`
-    }
-  }
-  const reqMyReservas = await fetch("http://localhost:3000/api/myReservas", options)
-  console.log(reqMyReservas)
-}
+// myReservaButton.onclick = async () => {
+//   const TOKEN =  window.sessionStorage.getItem("token")
+//   const options = {
+//     headers:{
+//       authorization:`Bearer ${TOKEN}`
+//     }
+//   }
+//   const reqMyReservas = await fetch("http://localhost:3000/api/myReservas", options)
+//   console.log(reqMyReservas)
+// }
 
 
 
@@ -345,23 +344,56 @@ const misReservasButton = document.getElementById("btn-misReservas")
 misReservasButton.addEventListener("click",async ()=>{
     const user = await auth0Client.getUser()
     console.log(user)
-    
-    document.getElementById("reservas-bar").style.display = "block"
 
-    const name = document.getElementById("user-nombre")
-    name.innerText = user.name
-    
-    const res = await fetch("http://localhost:3000/api/myReservas")
-    const reservas = await res.json()
+    const TOKEN =  window.sessionStorage.getItem("token")
+    const options = {
+      headers:{
+        authorization:`Bearer ${TOKEN}`
+      }
+    }
+    const reservasBlock = document.getElementById("reservas-bar")
 
-    reservas.forEach(r => {
-      const reservaContainer = document.getElementById("mis-reservas")
-      reservaContainer.innerHTML += `
-      <div class="row card text-white bg-dark">
-      <h5 class="card-title">${new Date(r.dateTime).toLocaleDateString()}</h5>
-      <p class="card-text">${new Date(r.dateTime).toLocaleTimeString()}</p>
-      <button type="button" class="btn btn-danger" onclick=cancelar(${r.id})>Cancelar</button>
-    </div>`
-    })
+    if (reservasBlock.style.display === "none"){
+      reservasBlock.style.display = "block" 
+
+      const name = document.getElementById("user-nombre")
+      name.innerText = user.name
+      
+      const reqMyReservas = await fetch("http://localhost:3000/api/myReservas", options)
+      const reservas = await reqMyReservas.json()
+
+      let html = ''
+      reservas.forEach(r => {
+        html += `
+        <div class="row card text-white bg-dark" id="reserva-${r.id}">
+        <h5 class="card-title">${new Date(r.dateTime).toLocaleDateString()}</h5>
+        <p class="card-text">${new Date(r.dateTime).toLocaleTimeString()}</p>
+        <button type="button" class="btn btn-danger" onclick=cancelar(${r.id})>Cancelar</button>
+      </div>`
+      })
+      document.getElementById("mis-reservas").innerHTML = html
+    } else {
+      reservasBlock.style.display="none"
+    }
+    
+    
     
 })
+
+
+const cancelar = async (id)=>{
+  console.log(id)
+
+  const TOKEN =  window.sessionStorage.getItem("token")
+  const options = {
+    method: 'DELETE',
+    headers:{
+      authorization:`Bearer ${TOKEN}`
+    }
+  }
+
+  const reqEliminarReserva = await fetch(`http://localhost:3000/api/reservas/delete/${id}`, options)
+
+  document.getElementById(`reserva-${id}`).style.display="none";
+  console.log(reqEliminarReserva)
+}
