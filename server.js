@@ -12,7 +12,9 @@ const checkJwt = auth({
 });
 
 // Devuelve archivos estaticos desde la carpeta public
-app.use(express.static(join(__dirname, "public")));
+app.use(express.static(join(__dirname, "/public")));
+app.use('/css',express.static(__dirname + "public/css" ));
+app.use('/js',express.static(__dirname + "public/js" ));
 app.use(cors({origin: "*"}))
 // Devuelve el archivo de configuracion
 app.get("/auth_config.json", (req, res) => {

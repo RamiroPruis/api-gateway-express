@@ -2,29 +2,85 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>SPA SDK Sample</title>
-    <link rel="stylesheet" type="text/css" href="/public/css/style.css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Turnos Vacunacion</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   </head>
 
-  <body>
-    <h2>SPA Authentication Sample</h2>
-    <p>Welcome to our page!</p>
-    <button id="btn-login" disabled="true" onclick="login()">Log in</button>
-    <button id="btn-logout" disabled="true" onclick="logout()">Log out</button>
+    <nav class="navbar navbar-dark bg-dark">
+      <span class="navbar-brand m-1" href="#">Turnos Vacunacion</span>
+      <button id="btn-login" disabled="true" onclick="login()">Log in</button>
+      <button id="btn-logout" disabled="true" onclick="logout()">Log out</button>
+    </nav>
+    <div class="background" >
+      <div class="container-lg formulario">
+        <form action="submit" id="reservas-form">
+          <div class="mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" type="email" name="email" id="reserva-mail" required />
+          </div>
+          <div class="mb-3">
+            <label  class="form-label" for="sucursal">Sucursal</label>
+            <select class="form-control" name="sucursal" id="reserva-sucursal" required></select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="dia">Dia</label>
+            <input class="form-control" type="date" name="dia" id="reserva-dia" required />
+          </div>
+          <div class="mb-3">
+            <label  class="form-label" for="horario">Horarios Disponibles</label>
+            <select class="form-control" name="horario" id="reserva-horario"  required>
+            </select>
+          </div>
+    
+          <button class="btn btn-primary" id="reserva-button">Reserva Ya</button>
+    
+        </form>
 
-    <div class="hidden" id="gated-content">
-      <p>
-        You're seeing this content because you're currently
-        <strong>logged in</strong>.
-      </p>
-      <label>
-        Access token:
-        <pre id="ipt-access-token"></pre>
-      </label>
-      <label>
-        User profile:
-        <pre id="ipt-user-profile"></pre>
-      </label>
+
+        <div class="pake">
+          <iframe  src="https://app.cartes.io/maps/b15857ea-d028-4563-84e7-294188a0ad7b/embed?type=map"
+              width="100%"
+              height="400"
+              frameborder="0">
+          </iframe>
+        </div>
+      </div>
+    </div>
+    
+    <div id="myModalConfirm" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="refreshPage()">&times;</span>
+        <p>Estas por confirmar una reserva con los siguientes datos:</p>
+        <div id="modal-confirm-text">
+
+        </div>
+        <button class="btn btn-primary" id="reserva-confirm" onclick="refreshPage()">Confirmar Turno</button>
+      </div>
+    </div>
+
+
+    <div id="myModalError" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="refreshPage()">&times;</span>
+        <p>Hubo un error al solicitar la reserva:</p>
+        <div id="modal-confirm-error">
+        </div>
+        <button class="btn btn-primary" id="reserva-error" onclick="refreshPage()">Aceptar</button>
+      </div>
+    </div>
+
+    <div id="myModalSolicitar" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="refreshPage()">&times;</span>
+        <p>Turno solicitado exitosamente. Revise su casilla de correo</p>
+        <p>Recuerde que, 24 horas antes del turno, usted recibirá un recordatorio del turno confirmando
+          fecha y hora a la que debe asistir a la sucursal mencionada..
+        </p>
+        <button class="btn btn-primary" id="reserva-solicitado" onclick="refreshPage()">Aceptar</button>
+      </div>
     </div>
 
     <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
