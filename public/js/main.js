@@ -114,15 +114,12 @@ const login = async () => {
 };
 
 
-
-
 const getSucursales = async () => {
   const reqSucursales = await fetch("http://localhost:3000/api/sucursales/")
   return reqSucursales.json()
 }
 
 const createMarkers = async (res) => {
-
 
   await res.forEach(async(sucursal) => {
     const options = {
@@ -143,9 +140,6 @@ const createMarkers = async (res) => {
   })
 
 }
-
-
-
 
 getSucursales().then((res) => {
   res.forEach((sucursal) => {
@@ -224,12 +218,15 @@ reservaButton.onclick = async () => {
 
   console.log(idreserva)
 
+  const token = await auth0Client.getUser()
+
   fetch(`http://localhost:3000/api/reservas/solicitar/${idreserva}`,{
+
       method: 'POST',
       body:JSON.stringify(
        {
-        userId:10,
-        email:obj.email
+          userId: token ? hashMail(token.email) : 0,
+          email:obj.email
       })
       }
      ).then(res => {
@@ -241,6 +238,15 @@ reservaButton.onclick = async () => {
         myModalError("No se pudo confirmar la reserva")
       }
      })
+}
+
+function  hashMail(mail){
+  let hash = 0
+  for (let i=0;i<mail.length;i++){
+      hash = hash + mail.charCodeAt(i)
+  }
+  console.log(hash)
+  return hash
 }
 
 const refreshPage = () =>{
@@ -308,19 +314,20 @@ window.onclick = function (event) {
   }
 }
 
-reservaConfirm.onclick = () => {
+reservaConfirm.onclick = async () => {
   const obj = {}
   const formData = new FormData(form)
   for (const key of formData.keys()) {
     obj[key] = formData.get(key)
   }
 
+  const token = await auth0Client.getUser()
   const idreserva = document.querySelector("#reserva-horario").value
 
   fetch(`http://localhost:3000/api/reservas/confirmar/${idreserva}`,{
      method:'POST',
      body: JSON.stringify({
-        userId: 10,
+        userId: token ? hashMail(token.email): 0,
         email: obj.email
      })
      }).then(res => {

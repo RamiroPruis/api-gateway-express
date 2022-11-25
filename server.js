@@ -6,11 +6,7 @@ const app = express();
 const { auth } = require('express-oauth2-jwt-bearer');
 // const { getSucursales, getReservas, postReservas } = require("./handler")
 const http = require("http")
-
-function  hashMail(mail){
-
-  return 10
-}
+const crypto = require('crypto')
 
 
 
@@ -66,15 +62,31 @@ app.delete("/api/reservas/delete/:idReserva", checkJwt, (req,res)=>{
 })
 
 app.get("/api/myReservas", checkJwt, (req,res)=>{
-  let token = req.headers.authorization
-  token = parseJwt(token)
-  console.log("Estamos entrando a pedir mis reservas", token.email)
-  const userId = hashMail(token.email)
+  // let token = req.headers.authorization
+  // token = parseJwt(token)
+  // console.log("Estamos entrando a pedir mis reservas", token.email)
+  const userId = getHash(req.headers.authorization)
 
   req.url = `http://localhost:3000/api/reservas?userId=${userId}`
   getReservas(req,res)
 })
 
+
+function  hashMail(mail){
+  let hash = 0
+  for (let i=0;i<mail.length;i++){
+      hash = hash + mail.charCodeAt(i)
+  }
+  return hash
+}
+
+const getHash = (auth) => {
+  let token = auth
+  token = parseJwt(token)
+  console.log("Estamos entrando a pedir mis reservas", token.email)
+  const userId = hashMail(token.email)
+  return userId
+}
 
 
 
